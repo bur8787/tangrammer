@@ -1,13 +1,30 @@
 export class ShapeConfig {
     name: string;
-    position: Position;
-    lineTo: Position[];
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    offset: Position;
+    relativeLineTo: Position[];
     color: string;
 
-    constructor(name: string, position: Position, lineTo: Position[], color: string) {
+    constructor(
+        name: string,
+        x: number,
+        y: number,
+        width: number,
+        height: number,
+        offset: Position,
+        relativeLineTo: Position[],
+        color: string,
+    ) {
         this.name = name;
-        this.position = position;
-        this.lineTo = lineTo;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.offset = offset;
+        this.relativeLineTo = relativeLineTo;
         this.color = color;
     }
 }

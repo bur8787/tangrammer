@@ -1,34 +1,46 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import 'Konva';
 import {ShapeCreatorService} from '../../services/shape-creator.service';
 
 declare const Konva: any;
 
 @Component({
-    selector: 'app-home',
-    templateUrl: 'home.page.html',
-    styleUrls: ['home.page.scss'],
+    selector: 'app-canvas',
+    templateUrl: './canvas.component.html',
+    styleUrls: ['./canvas.component.scss'],
 })
-export class HomePage implements OnInit {
+export class CanvasComponent implements AfterViewInit, OnInit {
     stage: any;
     layer: any;
     dragLayer: any;
     stageWidth = 250;
     stageHeight = 250;
+    elementId: string;
+    outputJson: string;
+    inputJson: string;
 
     constructor(
         private shapeCreator: ShapeCreatorService
     ) {
     }
 
+    generateElementId(): string {
+        return Math.floor(Math.random() * Math.floor(100000)).toString();
+    }
+
+
     ngOnInit() {
+        this.elementId = this.generateElementId();
+    }
+
+    ngAfterViewInit(): void {
         this.initialStage();
         this.addShapes();
     }
 
     initialStage() {
         this.stage = new Konva.Stage({
-            container: 'container',
+            container: this.elementId,
             width: this.stageWidth,
             height: this.stageHeight
         });
@@ -36,6 +48,7 @@ export class HomePage implements OnInit {
         this.dragLayer = new Konva.Layer();
         this.stage.add(this.layer, this.dragLayer);
         this.layer.draw();
+
 
         this.stage.on('dragstart', (evt) => {
             this.transform(evt, this.dragLayer);
@@ -129,7 +142,7 @@ export class HomePage implements OnInit {
                     },
                     x: sc.x,
                     y: sc.y,
-                    fill: Konva.Util.getRandomColor(),
+                    fill: sc.color,
                     draggable: true,
                     shadowColor: 'black',
                     shadowBlur: 2,
@@ -198,5 +211,29 @@ export class HomePage implements OnInit {
 
     log(a: any, b: any) {
         console.log(`${a.attrs.name} and ${b.attrs.name}: distance of x is ${a.x() - b.x()}, distance of y is ${a.y() - b.y()}`);
+        this.toJSON();
+    }
+
+    toJSON() {
+        this.outputJson = this.stage.toJSON();
+    }
+
+    drawFromJson() {
+        this.dragLayer.destroyChildren();
+        this.dragLayer.draw();
+        this.layer.destroyChildren();
+        this.layer.draw();
+        this.stage.destroy();
+
+        console.log(this.inputJson);
+
+        this.stage = Konva.Node.create(this.inputJson, this.elementId);
+        // this.stage.width(this.stageWidth);
+        // this.stage.height(this.stageHeight);
+
+        console.log(this.stage);
+        this.layer = this.stage.children[0];
+        this.layer.draw();
+        this.stage.draw();
     }
 }

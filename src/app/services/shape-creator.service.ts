@@ -12,46 +12,74 @@ export class ShapeCreatorService {
     getShapeConfigs(): ShapeConfig[] {
         const t1 = new ShapeConfig(
             't1',
+            75,
+            75,
+            50,
+            100,
             new Position(0, 0),
             Array.of<Position>(new Position(50, 50), new Position(0, 100)),
-            '#F7BE15'
+            '#008DD2',
         );
         const t2 = new ShapeConfig(
             't2',
+            75,
+            75,
+            100,
+            50,
             new Position(0, 0),
             Array.of<Position>(new Position(100, 0), new Position(50, 50)),
-            '#01818A'
+            '#00b2a9'
         );
         const t3 = new ShapeConfig(
             't3',
-            new Position(25, 75),
-            Array.of<Position>(new Position(50, 50), new Position(75, 75)),
-            '#FF5959'
+            100,
+            125,
+            50,
+            25,
+            new Position(0, 25),
+            Array.of<Position>(new Position(50, 0), new Position(25, -25)),
+            '#F18142'
         );
         const t4 = new ShapeConfig(
             't4',
-            new Position(75, 25),
-            Array.of<Position>(new Position(100, 50), new Position(100, 0)),
-            '#F88056'
+            150,
+            75,
+            25,
+            50,
+            new Position(0, 25),
+            Array.of<Position>(new Position(25, 25), new Position(25, -25)),
+            '#7477c9'
         );
         const t5 = new ShapeConfig(
             't5',
-            new Position(50, 100),
-            Array.of<Position>(new Position(100, 100), new Position(100, 50)),
-            '#9EB0B9'
+            125,
+            125,
+            50,
+            50,
+            new Position(0, 50),
+            Array.of<Position>(new Position(50, 0), new Position(50, -50)),
+            '#F08366'
         );
         const s1 = new ShapeConfig(
             's1',
-            new Position(0, 100),
-            Array.of<Position>(new Position(50, 100), new Position(75, 75), new Position(25, 75)),
-            '#235784'
+            75,
+            150,
+            75,
+            25,
+            new Position(0, 25),
+            Array.of<Position>(new Position(50, 0), new Position(75, -25), new Position(25, -25)),
+            '#F7A947'
         );
         const s2 = new ShapeConfig(
             's2',
-            new Position(50, 50),
-            Array.of<Position>(new Position(75, 75), new Position(100, 50), new Position(75, 25)),
-            '#364A69'
+            125,
+            100,
+            50,
+            50,
+            new Position(0, 25),
+            Array.of<Position>(new Position(25, 25), new Position(50, 0), new Position(25, -25)),
+            '#7787A1'
         );
-        return Array.of(t1, t2, t3, t4, t5, s1, s2);
+        return Array.of(t1, t2, s1, t3, s2, t4, t5);
     }
 }

@@ -17,7 +17,8 @@ export class ShapeCreatorService {
             50,
             100,
             new Position(0, 0),
-            Array.of<Position>(new Position(50, 50), new Position(0, 100)),
+            new Position(25, 50),
+            Array.of<Position>(new Position(0, 0), new Position(50, 50), new Position(0, 100)),
             '#008DD2',
         );
         const t2 = new ShapeConfig(
@@ -27,6 +28,7 @@ export class ShapeCreatorService {
             100,
             50,
             new Position(0, 0),
+            new Position(50, 25),
             Array.of<Position>(new Position(100, 0), new Position(50, 50)),
             '#00b2a9'
         );
@@ -37,6 +39,7 @@ export class ShapeCreatorService {
             50,
             25,
             new Position(0, 25),
+            new Position(50, 62.5),
             Array.of<Position>(new Position(50, 0), new Position(25, -25)),
             '#F18142'
         );
@@ -47,6 +50,7 @@ export class ShapeCreatorService {
             25,
             50,
             new Position(0, 25),
+            new Position(87.5, 25),
             Array.of<Position>(new Position(25, 25), new Position(25, -25)),
             '#7477c9'
         );
@@ -57,6 +61,7 @@ export class ShapeCreatorService {
             50,
             50,
             new Position(0, 50),
+            new Position(87.5, 87.5),
             Array.of<Position>(new Position(50, 0), new Position(50, -50)),
             '#F08366'
         );
@@ -67,6 +72,7 @@ export class ShapeCreatorService {
             75,
             25,
             new Position(0, 25),
+            new Position(37.5, 87.5),
             Array.of<Position>(new Position(50, 0), new Position(75, -25), new Position(25, -25)),
             '#F7A947'
         );
@@ -77,6 +83,7 @@ export class ShapeCreatorService {
             50,
             50,
             new Position(0, 25),
+            new Position(75, 50),
             Array.of<Position>(new Position(25, 25), new Position(50, 0), new Position(25, -25)),
             '#7787A1'
         );

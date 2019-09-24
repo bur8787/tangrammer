@@ -143,7 +143,7 @@ export class CanvasComponent implements AfterViewInit, OnInit {
                 const offsetX = sc.offset.x;
                 const offsetY = sc.offset.y;
                 context.beginPath();
-                context.moveTo(offsetX, offsetY);
+                context.moveTo(offsetX + sc.initial.x, offsetY + sc.initial.y);
                 sc.relativeLineTo.forEach((lt) => {
                     context.lineTo(offsetX + lt.x, offsetY + lt.y);
                 });

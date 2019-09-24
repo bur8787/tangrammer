@@ -5,6 +5,7 @@ export class ShapeConfig {
     width: number;
     height: number;
     offset: Position;
+    initial: Position;
     relativeLineTo: Position[];
     color: string;
 
@@ -15,6 +16,7 @@ export class ShapeConfig {
         width: number,
         height: number,
         offset: Position,
+        initial: Position,
         relativeLineTo: Position[],
         color: string,
     ) {
@@ -24,6 +26,7 @@ export class ShapeConfig {
         this.width = width;
         this.height = height;
         this.offset = offset;
+        this.initial = initial;
         this.relativeLineTo = relativeLineTo;
         this.color = color;
     }

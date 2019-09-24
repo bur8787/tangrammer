@@ -9,7 +9,7 @@ export class ShapeCreatorService {
     constructor() {
     }
 
-    getShapeConfigs(): ShapeConfig[] {
+    getDefaultShapeConfigs(): ShapeConfig[] {
         const t1 = new ShapeConfig(
             't1',
             75,

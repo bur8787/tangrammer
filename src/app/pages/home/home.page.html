@@ -7,13 +7,21 @@
 <ion-content fullscreen>
     <ion-grid>
         <ion-row>
-            <ion-col offsetMd="4" sizeMd="4" size="12" text-center>
-                <app-canvas></app-canvas>
+            <ion-col offsetSm="2" sizeSm="4" size="12" text-center>
+                <app-canvas #actualCanvas>
+                </app-canvas>
+            </ion-col>
+            <ion-col sizeSm="4" size="12" text-center>
+                <app-canvas #expectedCanvas
+                            [initialShapeConfigJSON]="getAnswerShapeConfig()">
+                </app-canvas>
             </ion-col>
         </ion-row>
         <ion-row>
-            <ion-col offsetMd="4" sizeMd="4" size="12" text-center>
-                <app-canvas></app-canvas>
+            <ion-col offsetSm="2" sizeSm="8" size="12" text-center>
+                <h2>debug</h2>
+                <ion-button (click)="judge()">judge</ion-button>
+                {{result.isOK()}}
             </ion-col>
         </ion-row>
     </ion-grid>

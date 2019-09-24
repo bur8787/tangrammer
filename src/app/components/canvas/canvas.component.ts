@@ -1,6 +1,7 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
 import 'Konva';
 import {ShapeCreatorService} from '../../services/shape-creator.service';
+import {ShapePosition, ShapePositions} from '../../types/judge-result';
 
 declare const Konva: any;
 
@@ -16,18 +17,13 @@ export class CanvasComponent implements AfterViewInit, OnInit {
     stageWidth = 250;
     stageHeight = 250;
     elementId: string;
-    outputJson: string;
     inputJson: string;
+    @Input() initialShapeConfigJSON: string;
 
     constructor(
         private shapeCreator: ShapeCreatorService
     ) {
     }
-
-    generateElementId(): string {
-        return Math.floor(Math.random() * Math.floor(100000)).toString();
-    }
-
 
     ngOnInit() {
         this.elementId = this.generateElementId();
@@ -35,7 +31,15 @@ export class CanvasComponent implements AfterViewInit, OnInit {
 
     ngAfterViewInit(): void {
         this.initialStage();
-        this.addShapes();
+        if (this.initialShapeConfigJSON) {
+            this.drawFromJson(this.initialShapeConfigJSON);
+        } else {
+            this.addDefaultShapes();
+        }
+    }
+
+    generateElementId(): string {
+        return Math.floor(Math.random() * Math.floor(100000)).toString();
     }
 
     initialStage() {
@@ -48,7 +52,6 @@ export class CanvasComponent implements AfterViewInit, OnInit {
         this.dragLayer = new Konva.Layer();
         this.stage.add(this.layer, this.dragLayer);
         this.layer.draw();
-
 
         this.stage.on('dragstart', (evt) => {
             this.transform(evt, this.dragLayer);
@@ -66,7 +69,6 @@ export class CanvasComponent implements AfterViewInit, OnInit {
         });
 
         this.stage.on('dragend', (evt) => {
-            this.logRelativePosition();
             this.transform(evt, this.layer);
 
             const shape = evt.target;
@@ -126,50 +128,46 @@ export class CanvasComponent implements AfterViewInit, OnInit {
         layer.draw();
     }
 
-    addShapes() {
-        this.shapeCreator.getShapeConfigs().forEach((sc) => {
-                const s = new Konva.Shape({
-                    sceneFunc: (context, shape) => {
-                        const offsetX = sc.offset.x;
-                        const offsetY = sc.offset.y;
-                        context.beginPath();
-                        context.moveTo(offsetX, offsetY);
-                        sc.relativeLineTo.forEach((lt) => {
-                            context.lineTo(offsetX + lt.x, offsetY + lt.y);
-                        });
-                        context.closePath();
-                        context.fillStrokeShape(shape);
-                    },
-                    x: sc.x,
-                    y: sc.y,
-                    fill: sc.color,
-                    draggable: true,
-                    shadowColor: 'black',
-                    shadowBlur: 2,
-                    shadowOpacity: 0.5,
-                    name: sc.name,
-                    // rotation: 90,
-                    // offset: {
-                    //     x: sc.x + sc.width / 2,
-                    //     y: sc.y + sc.height / 2
-                    // }
-                    // shadowOffset: {
-                    //     x: 1,
-                    //     y: 1
-                    // },
-                });
-                s.getSelfRect = () => {
-                    return {
-                        x: 0,
-                        y: 0,
-                        width: sc.width,
-                        height: sc.height
-                    };
-                };
+    addDefaultShapes() {
+        this.shapeCreator.getDefaultShapeConfigs().forEach((sc) => {
+                const s = this.generateDefaultShape(sc);
                 this.layer.add(s);
             }
         );
         this.layer.batchDraw();
+    }
+
+    generateDefaultShape(sc: any): any {
+        const s = new Konva.Shape({
+            sceneFunc: (context, shape) => {
+                const offsetX = sc.offset.x;
+                const offsetY = sc.offset.y;
+                context.beginPath();
+                context.moveTo(offsetX, offsetY);
+                sc.relativeLineTo.forEach((lt) => {
+                    context.lineTo(offsetX + lt.x, offsetY + lt.y);
+                });
+                context.closePath();
+                context.fillStrokeShape(shape);
+            },
+            x: sc.x,
+            y: sc.y,
+            fill: sc.color,
+            draggable: true,
+            // shadowColor: 'black',
+            // shadowBlur: 2,
+            // shadowOpacity: 0.5,
+            name: sc.name,
+        });
+        s.getSelfRect = () => {
+            return {
+                x: 0,
+                y: 0,
+                width: sc.width,
+                height: sc.height
+            };
+        };
+        return s;
     }
 
     fitStageIntoParentContainer = () => {
@@ -214,26 +212,75 @@ export class CanvasComponent implements AfterViewInit, OnInit {
         this.toJSON();
     }
 
-    toJSON() {
-        this.outputJson = this.stage.toJSON();
+    toJSON(): ShapePositions {
+        console.log(this.stage.toJSON());
+        const t1c = this.stage.find('.t1')[0];
+        const t1 = new ShapePosition(t1c.x(), t1c.y(), t1c.rotation());
+        const t2c = this.stage.find('.t2')[0];
+        const t2 = new ShapePosition(t2c.x(), t2c.y(), t2c.rotation());
+        const t3c = this.stage.find('.t3')[0];
+        const t3 = new ShapePosition(t3c.x(), t3c.y(), t3c.rotation());
+        const t4c = this.stage.find('.t4')[0];
+        const t4 = new ShapePosition(t4c.x(), t4c.y(), t4c.rotation());
+        const t5c = this.stage.find('.t5')[0];
+        const t5 = new ShapePosition(t5c.x(), t5c.y(), t5c.rotation());
+        const s1c = this.stage.find('.s1')[0];
+        const s1 = new ShapePosition(s1c.x(), s1c.y(), s1c.rotation());
+        const s2c = this.stage.find('.s2')[0];
+        const s2 = new ShapePosition(s2c.x(), s2c.y(), s2c.rotation());
+        return new ShapePositions(t1, t2, t3, t4, t5, s1, s2);
     }
 
-    drawFromJson() {
+    drawFromJson(json: string) {
+        this.resetCanvas();
+        this.stage = Konva.Node.create(json, this.elementId);
+        // this.stage.width(this.stageWidth);
+        // this.stage.height(this.stageHeight);
+        this.layer.draw();
+        this.layer = this.stage.children[0];
+        this.stage.draw();
+        this.attachShapeConfig();
+        this.layer.draw();
+    }
+
+    resetCanvas() {
         this.dragLayer.destroyChildren();
         this.dragLayer.draw();
         this.layer.destroyChildren();
         this.layer.draw();
         this.stage.destroy();
+    }
 
-        console.log(this.inputJson);
+    attachShapeConfig(): any {
+        Array.of('t1', 't2', 't3', 't4', 't5', 's1', 's2').forEach(name =>
+            this.stage.find(`.${name}`).forEach(s => {
+                const sc = this.shapeCreator.getDefaultShapeConfigs().find((dsc) => dsc.name === name);
+                console.log(sc);
 
-        this.stage = Konva.Node.create(this.inputJson, this.elementId);
-        // this.stage.width(this.stageWidth);
-        // this.stage.height(this.stageHeight);
-
-        console.log(this.stage);
-        this.layer = this.stage.children[0];
-        this.layer.draw();
-        this.stage.draw();
+                const ns = new Konva.Shape({
+                    sceneFunc: (context, shape) => {
+                        const offsetX = sc.offset.x;
+                        const offsetY = sc.offset.y;
+                        context.beginPath();
+                        context.moveTo(offsetX, offsetY);
+                        sc.relativeLineTo.forEach((lt) => {
+                            context.lineTo(offsetX + lt.x, offsetY + lt.y);
+                        });
+                        context.closePath();
+                        context.fillStrokeShape(shape);
+                    },
+                    x: s.x(),
+                    y: s.y(),
+                    fill: 'black',
+                    draggable: false,
+                    shadowColor: 'black',
+                    shadowBlur: 2,
+                    shadowOpacity: 0.5,
+                    name: sc.name,
+                });
+                this.layer.add(ns);
+                s.destroy();
+            })
+        );
     }
 }

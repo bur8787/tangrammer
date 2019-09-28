@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import 'Konva';
 import {ShapeCreatorService} from '../../services/shape-creator.service';
 import {ShapePosition, ShapePositions} from '../../types/judge-result';
@@ -19,6 +19,7 @@ export class CanvasComponent implements AfterViewInit, OnInit {
     elementId: string;
     inputJson: string;
     @Input() initialShapeConfigJSON: string;
+    @Output() moved = new EventEmitter();
 
     constructor(
         private shapeCreator: ShapeCreatorService
@@ -80,6 +81,7 @@ export class CanvasComponent implements AfterViewInit, OnInit {
             //     },
             // });
             this.stage.draw();
+            this.onMoved();
         });
 
         this.stage.on('click tap', (e) => {
@@ -131,6 +133,10 @@ export class CanvasComponent implements AfterViewInit, OnInit {
     addDefaultShapes() {
         this.shapeCreator.getDefaultShapeConfigs().forEach((sc) => {
                 const s = this.generateDefaultShape(sc);
+                s.on('transformend', (e) => {
+                    this.onMoved();
+                });
+
                 this.layer.add(s);
             }
         );
@@ -282,5 +288,10 @@ export class CanvasComponent implements AfterViewInit, OnInit {
                 s.destroy();
             })
         );
+    }
+
+    onMoved() {
+        console.log('moved');
+        this.moved.emit();
     }
 }

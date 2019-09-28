@@ -3,19 +3,25 @@ import {CommonModule} from '@angular/common';
 import {CanvasComponent} from '../../components/canvas/canvas.component';
 import {IonicModule} from '@ionic/angular';
 import {FormsModule} from '@angular/forms';
+import {CorrectAnswerModalComponent} from '../../components/correct-answer-modal/correct-answer-modal.component';
 
 
 @NgModule({
     declarations: [
         CanvasComponent,
+        CorrectAnswerModalComponent,
     ],
     exports: [
-        CanvasComponent
+        CanvasComponent,
+        CorrectAnswerModalComponent,
     ],
     imports: [
         CommonModule,
         IonicModule,
         FormsModule
+    ],
+    entryComponents: [
+        CorrectAnswerModalComponent,
     ]
 })
 export class SharedModule {

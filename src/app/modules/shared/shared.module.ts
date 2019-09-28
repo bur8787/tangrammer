@@ -4,6 +4,7 @@ import {CanvasComponent} from '../../components/canvas/canvas.component';
 import {IonicModule} from '@ionic/angular';
 import {FormsModule} from '@angular/forms';
 import {CorrectAnswerModalComponent} from '../../components/correct-answer-modal/correct-answer-modal.component';
+import {LottieAnimationViewModule} from 'ng-lottie';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import {CorrectAnswerModalComponent} from '../../components/correct-answer-modal
     imports: [
         CommonModule,
         IonicModule,
-        FormsModule
+        FormsModule,
+        LottieAnimationViewModule
     ],
     entryComponents: [
         CorrectAnswerModalComponent,

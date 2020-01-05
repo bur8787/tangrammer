@@ -2,6 +2,7 @@ import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output} from '@an
 import 'Konva';
 import {ShapeCreatorService} from '../../services/shape-creator.service';
 import {ShapePosition, ShapePositions} from '../../types/judge-result';
+import {environment} from '../../../environments/environment';
 
 declare const Konva: any;
 
@@ -18,12 +19,15 @@ export class CanvasComponent implements AfterViewInit, OnInit {
     stageHeight = 250;
     elementId: string;
     inputJson: string;
+    isProduction: boolean;
+
     @Input() initialShapeConfigJSON: string;
     @Output() moved = new EventEmitter();
 
     constructor(
         private shapeCreator: ShapeCreatorService
     ) {
+        this.isProduction = environment.production;
     }
 
     ngOnInit() {
@@ -279,9 +283,8 @@ export class CanvasComponent implements AfterViewInit, OnInit {
                     y: s.y(),
                     fill: 'black',
                     draggable: false,
-                    shadowColor: 'black',
-                    shadowBlur: 2,
-                    shadowOpacity: 0.5,
+                    stroke: 'black',
+                    strokeWidth: 0.2,
                     name: sc.name,
                 });
                 this.layer.add(ns);

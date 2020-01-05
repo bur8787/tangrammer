@@ -3,6 +3,7 @@ import {JudgeResult} from '../../types/judge-result';
 import {CanvasComponent} from '../../components/canvas/canvas.component';
 import {PopoverController} from '@ionic/angular';
 import {CorrectAnswerModalComponent} from '../../components/correct-answer-modal/correct-answer-modal.component';
+import {environment} from '../../../environments/environment';
 
 @Component({
     selector: 'app-home',
@@ -14,10 +15,13 @@ export class HomePage implements OnInit {
     @ViewChild('actualCanvas', {static: false}) actualCanvas: CanvasComponent;
     @ViewChild('expectedCanvas', {static: false}) expectedCanvas: CanvasComponent;
     result: JudgeResult = new JudgeResult(null, null);
+    isProduction: boolean;
+    cleared: boolean;
 
     constructor(
         public popoverController: PopoverController
     ) {
+        this.isProduction = environment.production;
     }
 
     ngOnInit(): void {
@@ -28,12 +32,16 @@ export class HomePage implements OnInit {
     }
 
     async judge() {
-        console.log('judge');
+        if (this.cleared) {
+            return;
+        }
+
         const e = this.expectedCanvas.toJSON();
         const a = this.actualCanvas.toJSON();
         this.result = new JudgeResult(e, a);
 
         if (this.result.isOK()) {
+            this.cleared = true;
             const popover = await this.popoverController.create({
                 component: CorrectAnswerModalComponent,
                 translucent: true

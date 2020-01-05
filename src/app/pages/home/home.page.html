@@ -1,23 +1,31 @@
 <ion-header>
     <ion-toolbar padding-start>
-        tangrammer
+        ヒマグラム
     </ion-toolbar>
 </ion-header>
 
 <ion-content fullscreen>
     <ion-grid>
         <ion-row>
-            <ion-col offsetSm="2" sizeSm="4" size="12" text-center>
-                <app-canvas #actualCanvas (moved)="judge()">
-                </app-canvas>
+            <ion-col offsetSm="2" sizeSm="8" size="12" text-center>
+                <p>お題: ねこ
+                    <ion-chip *ngIf="cleared" color="primary">
+                        <ion-icon name="checkmark-circle"></ion-icon>
+                        <ion-label>CLEAR!</ion-label>
+                    </ion-chip>
+                </p>
             </ion-col>
-            <ion-col sizeSm="4" size="12" text-center>
+            <ion-col offsetSm="2" sizeSm="4" size="12" text-center>
                 <app-canvas #expectedCanvas
                             [initialShapeConfigJSON]="getAnswerShapeConfig()">
                 </app-canvas>
             </ion-col>
+            <ion-col sizeSm="4" size="12" text-center>
+                <app-canvas #actualCanvas (moved)="judge()">
+                </app-canvas>
+            </ion-col>
         </ion-row>
-        <ion-row>
+        <ion-row *ngIf="!isProduction">
             <ion-col offsetSm="2" sizeSm="8" size="12" text-center>
                 <h2>debug</h2>
                 <ion-button (click)="judge()">judge</ion-button>

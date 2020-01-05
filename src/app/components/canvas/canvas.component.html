@@ -2,7 +2,9 @@
     <div [attr.id]="elementId">
     </div>
 </div>
-<h2>debug</h2>
-<ion-input [(ngModel)]="inputJson"></ion-input>
-<ion-button (click)="drawFromJson(inputJson)">drawFromJson</ion-button>
-<ion-button (click)="toJSON()">toJSON</ion-button>
+<div *ngIf="!isProduction">
+    <h2>debug</h2>
+    <ion-input [(ngModel)]="inputJson"></ion-input>
+    <ion-button (click)="drawFromJson(inputJson)">drawFromJson</ion-button>
+    <ion-button (click)="toJSON()">toJSON</ion-button>
+</div>

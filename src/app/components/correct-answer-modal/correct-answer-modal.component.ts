@@ -11,10 +11,10 @@ export class CorrectAnswerModalComponent implements OnInit {
 
     constructor() {
         this.lottieConfig = {
-            path: 'assets/pinjump.json',
+            path: 'assets/433-checked-done.json',
             renderer: 'canvas',
             autoplay: true,
-            loop: true
+            loop: false,
         };
     }
 
